@@ -30,8 +30,8 @@ For example, on the main form, ALT+S is the shortcut for the 'Search' button, AL
 
 For any bugs feel free to pm or email me.
 
-### Santiago Squarzon
-### https://github.com/santysq
-
-## Special mention to Douglas Finke for creating the awesome ImportExcel PowerShell Module.
-## Check out his GitHub at https://github.com/dfinke.
+Santiago Squarzon
+https://github.com/santysq  
+  
+Special mention to Douglas Finke for creating the awesome ImportExcel PowerShell Module.
+Check out his GitHub at https://github.com/dfinke.
