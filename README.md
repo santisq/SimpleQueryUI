@@ -28,10 +28,6 @@ For example, on the main form, ALT+S is the shortcut for the 'Search' button, AL
 
 ### Export Formats: *.xlsx, *.csv, *.txt, *.xml, *.json
 
-For any bugs feel free to pm or email me.
-
-Santiago Squarzon
-https://github.com/santysq  
+#### For any bugs feel free to pm or email me.
   
-Special mention to Douglas Finke for creating the awesome ImportExcel PowerShell Module.
-Check out his GitHub at https://github.com/dfinke.
+#### __Special mention to Douglas Finke for creating the awesome ImportExcel PowerShell Module. Check out his GitHub at https://github.com/dfinke.__
