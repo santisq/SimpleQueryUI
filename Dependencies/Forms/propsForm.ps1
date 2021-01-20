@@ -89,7 +89,12 @@ $removeBtn.Add_Click({
         $selectedPropsLst.Items.Remove($selected[$i])
     }
     $selectedPropsLst.ClearSelected()
-    if(!$selectedPropsLst.Items){$confirmPropsBtn.Enabled=$false}
+    
+    if(!$selectedPropsLst.Items){
+        $confirmPropsBtn.Enabled=$false
+    }else{
+        $confirmPropsBtn.Enabled=$True
+    }
 })
 $propsForm.Controls.Add($removeBtn)
 
