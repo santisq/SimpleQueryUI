@@ -50,6 +50,12 @@ $propsListCBox.Add_KeyDown({
     if($_.KeyCode -eq 'Enter' -and $propsListCBox.SelectedItem -notin $selectedPropsLst.Items){
         $selectedPropsLst.Items.Add($propsListCBox.SelectedItem)
     }
+
+    if(!$selectedPropsLst.Items){
+        $confirmPropsBtn.Enabled=$false
+    }else{
+        $confirmPropsBtn.Enabled=$True
+    }
 })
 $propsListCBox.SelectedIndex=0
 $propsForm.Controls.Add($propsListCBox)
@@ -63,7 +69,9 @@ $addBtn.Add_Click({
     if($propsListCBox.SelectedItem -notin $selectedPropsLst.Items){
         $selectedPropsLst.Items.Add($propsListCBox.SelectedItem)
     }
-    if(!$confirmPropsBtn.Enabled){
+    if(!$selectedPropsLst.Items){
+        $confirmPropsBtn.Enabled=$false
+    }else{
         $confirmPropsBtn.Enabled=$True
     }
 })
@@ -91,14 +99,6 @@ $selectedPropsLst.Location=New-Object System.Drawing.Size(10,70)
 $selectedPropsLst.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
 $selectedPropsLst.SelectionMode=3
 $selectedPropsLst.Items.Add('Name') > $null
-
-if('a-personnelNumber' -in $Properties){
-    $selectedPropsLst.Items.Add('a-personnelNumber') > $null
-}
-
-if('a-nonAccentureNumber' -in $Properties){
-    $selectedPropsLst.Items.Add('a-nonAccentureNumber') > $null
-}
 $propsForm.Controls.Add($selectedPropsLst)
 
 $addAllBtn=New-Object System.Windows.Forms.Button
@@ -113,8 +113,9 @@ $addAllBtn.Add_Click({
         }
     }
     
-    if(!$confirmPropsBtn.Enabled)
-    {
+    if(!$selectedPropsLst.Items){
+        $confirmPropsBtn.Enabled=$false
+    }else{
         $confirmPropsBtn.Enabled=$True
     }
 })

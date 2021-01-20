@@ -101,7 +101,7 @@ if($browse.FileName){
 
         '\.txt$'{
             &$exportBar
-            $object|Out-File $fullPath -Encoding UTF8
+            ($object|FL|Out-String).trim()|Out-File $fullPath -Encoding UTF8
             &$exportBarComplete
         }
 

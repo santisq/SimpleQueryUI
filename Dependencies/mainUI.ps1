@@ -109,7 +109,7 @@ $searchBtn.Add_Click({
 
 $mainForm.Controls.Add($searchBtn)
 $mainForm.Controls.Add($exportBtn)
-$mainForm.Controls.Add($clearBtn)
+#$mainForm.Controls.Add($clearBtn)
 $mainForm.Controls.Add($helpBtn)
 $mainForm.Controls.Add($exitBtn)
 
