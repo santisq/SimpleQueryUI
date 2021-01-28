@@ -16,6 +16,9 @@ if($lines)
     }else{
         $toProcess=$lines
     }
+}
+if($toProcess)
+{
     $i=$toProcess|select -First 1
     $filter="(|(distinguishedname=$i)(samaccountname=$i)(name=$i)(userprincipalname=$i))"
     $allProps=switch($objectClass)
@@ -33,5 +36,20 @@ if($lines)
         . "$depPath\Forms\propsForm.ps1" -Properties $propsArray -toProcess $toProcess -ObjectClass $objectClass
         $searchForm.Dispose()
     }
+}else{
+
+$msg='None of the entries used could be found in Active Directory.
+Check your input and try again.'
+
+   $hash=@{
+        Title='No Objects Found'
+        Message=$msg
+        Buttons='OK'
+        Icon='Information'
+    }
+    $result=Show-MessageBox @hash
+
+$progressBar.Value=0
+$progressLbl.Text='Ready'
 
 }
