@@ -8,22 +8,16 @@ try
     {
         $progressLbl.Text='Loading Active Directory Module...'
         $progressBar.Maximum=100
+        $progressBar.Value=50
         $mainForm.Refresh()
-        sleep -Milliseconds 1
-        while($progressBar.Value -lt $progressBar.Maximum/2)
-        {
-            $progressBar.Value++
-            $mainForm.Refresh()
-            sleep -Milliseconds 1
-        }
-            
+        sleep 1
+        $progressBar.Value=100
+        $mainForm.Refresh()
+        sleep 1
+
         $ADTrue=Import-Module ActiveDirectory -PassThru
         
         $mainForm.Refresh()
-        $progressBar.Value=100
-        $mainForm.Refresh()
-        sleep -Milliseconds 5
-            
         $progressBar.Value=0
         $progressBar.Style=1
         $progressLbl.Text='Ready'
@@ -45,8 +39,5 @@ try
     $result=Show-MessageBox @hash
     if($result -eq 'Yes'){
         start-process 'https://docs.microsoft.com/en-us/powershell/module/addsadministration'
-    }else{
-        $mainForm.Close()
     }
-
 }

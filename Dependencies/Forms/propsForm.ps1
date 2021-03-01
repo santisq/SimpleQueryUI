@@ -4,16 +4,9 @@
     [parameter(mandatory)]
     [string[]]$toProcess,
     [parameter(mandatory)]
-    [string]$ObjectClass
+    [string]$ObjectClass,
+    [string[]]$thisSelectedProps
 )
-
-[void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
-[void][Reflection.Assembly]::LoadWithPartialName('System.Drawing')
-[System.Windows.Forms.Application]::EnableVisualStyles()
-
-$bounds=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-$width=$bounds.Width
-$height=$bounds.Height
 
 $propsForm=New-Object System.Windows.Forms.Form
 $propsForm.StartPosition='CenterScreen'
@@ -21,8 +14,7 @@ $propsForm.Icon=[System.Drawing.Icon]::ExtractAssociatedIcon("$PSHOME\PowerShell
 $propsForm.FormBorderStyle='Fixed3D'
 $propsForm.KeyPreview=$True
 $propsForm.Text='Select Properties'
-$propsForm.Width=$width-800
-$propsForm.Height=$height-180
+$propsForm.ClientSize=New-Object System.Drawing.Size(($width/3),($height/2))
 $propsForm.MaximizeBox=$false
 
 $availPropsLbl=New-Object System.Windows.Forms.Label
@@ -40,11 +32,6 @@ $propsListCBox.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.Fo
 $propsListCBox.DropDownStyle='DropDown'#[System.Windows.Forms.ComboBoxStyle]::DropDown
 $propsListCBox.AutoCompleteSource='ListItems'
 $propsListCBox.AutoCompleteMode='SuggestAppend'
-#$propsListCBox.Add_TextUpdate({
-#    if(!$this.DroppedDown){
-#        $this.DroppedDown=$true
-#    }
-#})
 $Properties|%{$propsListCBox.Items.Add($_)} > $null
 $propsListCBox.Add_KeyDown({
     if($_.KeyCode -eq 'Enter' -and $propsListCBox.SelectedItem -notin $selectedPropsLst.Items){
@@ -103,7 +90,16 @@ $selectedPropsLst.Size=New-Object System.Drawing.Size(($propsForm.Width-40),($pr
 $selectedPropsLst.Location=New-Object System.Drawing.Size(10,70)
 $selectedPropsLst.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
 $selectedPropsLst.SelectionMode=3
-$selectedPropsLst.Items.Add('Name') > $null
+if($thisSelectedProps)
+{
+    $thisSelectedProps|%{
+        $selectedPropsLst.Items.Add($_)
+    }
+}
+else
+{
+    $selectedPropsLst.Items.Add('Name') > $null
+}
 $propsForm.Controls.Add($selectedPropsLst)
 
 $addAllBtn=New-Object System.Windows.Forms.Button
@@ -126,6 +122,21 @@ $addAllBtn.Add_Click({
 })
 $propsForm.Controls.Add($addAllBtn)
 
+$removeAllBtn=New-Object System.Windows.Forms.Button
+$removeAllBtn.Size=New-Object System.Drawing.Size(85,27)
+$removeAllBtn.Location=New-Object System.Drawing.Size(($addAllBtn.Location.X+$addAllBtn.Width+3),($selectedPropsLst.Height+73))
+$removeAllBtn.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
+$removeAllBtn.Text="R&emove All"
+$removeAllBtn.Add_Click({
+    $thisItems=@($selectedPropsLst.Items)
+    for($i=0;$i -lt $thisItems.Count;$i++)
+    {
+        $selectedPropsLst.Items.Remove($thisItems[$i])
+    }
+    $confirmPropsBtn.Enabled=$false
+})
+$propsForm.Controls.Add($removeAllBtn)
+
 $confirmPropsBtn=New-Object System.Windows.Forms.Button
 $confirmPropsBtn.Size=New-Object System.Drawing.Size(85,27)
 $confirmPropsBtn.Location=New-Object System.Drawing.Size(($propsForm.Width-$confirmPropsBtn.Width-30),($selectedPropsLst.Height+73))
@@ -136,7 +147,7 @@ $confirmPropsBtn.Add_Click({
     $propsForm.Hide()
     $selectedProps=$selectedPropsLst.Items
     $mainForm.Activate()
-
+    New-Variable -Name thisProps -Value $selectedProps -Scope Global -Force
     . "$depPath\Listeners\toGridEventListener.ps1" -Properties $selectedProps -toProcess $toProcess -ObjectClass $ObjectClass
 
 })

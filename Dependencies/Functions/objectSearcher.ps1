@@ -15,12 +15,19 @@ $mainForm.Refresh()
 
 foreach($Object in $Objects)
 {
-    $filter="(|(distinguishedname=$Object)(samaccountname=$Object)(name=$Object)(userprincipalname=$Object))"
+    $filter="(|(distinguishedname=$Object)(samaccountname=$Object)(name=$Object)(a-personnelNumber=$Object)(a-nonAccentureNumber=$Object)(userprincipalname=$Object))"
     switch($Class)
     {
-        'User'{Get-ADUser -LDAPFilter $filter -Properties $Properties}
-        'Group'{Get-ADGroup -LDAPFilter $filter -Properties $Properties}
-        'Computer'{Get-ADComputer -LDAPFilter $filter -Properties $Properties}
+        'User'{
+            Get-ADUser -LDAPFilter $filter -Properties $Properties
+        }
+        'Group'{
+            Get-ADGroup -LDAPFilter $filter -Properties $Properties
+        }
+        'Computer'{
+            Get-ADComputer -LDAPFilter $filter -Properties $Properties
+                
+        }
     }
     
     $progressBar.PerformStep()

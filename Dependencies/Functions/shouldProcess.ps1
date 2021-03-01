@@ -22,7 +22,7 @@ process{
 
 foreach($entry in $Entries)
 {
-    $filter="(|(distinguishedname=$entry)(samaccountname=$entry)(name=$entry)(userprincipalname=$entry))"
+    $filter="(|(distinguishedname=$entry)(samaccountname=$entry)(name=$entry)(a-personnelNumber=$entry)(a-nonAccentureNumber=$entry)(userprincipalname=$entry))"
     $obj=Get-ADObject -LDAPFilter $filter|select -First 1
     
     switch($obj.ObjectClass){

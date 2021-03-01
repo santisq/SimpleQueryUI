@@ -12,32 +12,40 @@ if($lines)
     $shouldProcess=shouldProcess -Entries $lines -Class $objectClass
     if($shouldProcess){
         . "$depPath\Forms\skippedForm.ps1" -SkippedLines $shouldProcess
-        $toProcess=$lines|?{$_ -notin $shouldProcess.Entry}
+        $script:toProcess=$lines|?{$_ -notin $shouldProcess.Entry}
     }else{
-        $toProcess=$lines
+        $script:toProcess=$lines
     }
 }
-if($toProcess)
+if($toprocess)
 {
     $i=$toProcess|select -First 1
-    $filter="(|(distinguishedname=$i)(samaccountname=$i)(name=$i)(userprincipalname=$i))"
+    $filter="(|(distinguishedname=$i)(samaccountname=$i)(name=$i)(a-personnelNumber=$i)(a-nonAccentureNumber=$i)(userprincipalname=$i))"
     $allProps=switch($objectClass)
     {
-        'User'{Get-ADUser -LDAPFilter $filter -Properties *}
-        'Group'{Get-ADGroup -LDAPFilter $filter -Properties *}
-        'Computer'{Get-ADComputer -LDAPFilter $filter -Properties *}
+        'User'{
+            Get-ADUser -LDAPFilter $filter -Properties *
+        }
+        'Group'{
+            Get-ADGroup -LDAPFilter $filter -Properties *
+        }
+        'Computer'{
+            Get-ADComputer -LDAPFilter $filter -Properties *
+                
+        }
     }
     
     $progressBar.PerformStep()
 
     if($allProps)
     {
-        $propsArray=($allProps|gm -MemberType Property).Name|?{$_ -notmatch 'PSShowComputerName|Write'}
+        $script:propsArray=($allProps|gm -MemberType Property).Name|?{$_ -notmatch 'PSShowComputerName|Write'}
         . "$depPath\Forms\propsForm.ps1" -Properties $propsArray -toProcess $toProcess -ObjectClass $objectClass
         $searchForm.Dispose()
     }
-}else{
-
+}
+else
+{
 $msg='None of the entries used could be found in Active Directory.
 Check your input and try again.'
 
@@ -51,5 +59,4 @@ Check your input and try again.'
 
 $progressBar.Value=0
 $progressLbl.Text='Ready'
-
 }

@@ -9,36 +9,31 @@ $resetBar={
     $mainForm.Refresh()
 }
 
-try{
-
-    if((Get-Module ImportExcel).Version.Major -ne 7){
-        
+try
+{
+    if((Get-Module ImportExcel).Version.Major -ne 7)
+    {
         $progressLbl.Text='Loading Excel Module...'
         $progressBar.Maximum=100
+        $progressBar.Value=50
         $mainForm.Refresh()
-        sleep -Milliseconds 1
-        while($progressBar.Value -lt $progressBar.Maximum/2)
-        {
-            $progressBar.Value++
-            $mainForm.Refresh()
-            sleep -Milliseconds 1
-        }
+        sleep 1
+        $progressBar.Value=100
+        $mainForm.Refresh()
+        sleep 1
 
         $ExcelTrue=Import-Module ImportExcel -PassThru
 
         $mainForm.Refresh()
-        $progressBar.Value=100
-        $mainForm.Refresh()
-        sleep -Milliseconds 5
-
         &$resetBar
 
         if($ExcelTrue.Version.Major -ne 7){throw}
         else{return $True}
         
     }else{return $true}
-
-}catch{
+}
+catch
+{
 
     $hash=@{
         Title='Dependency Module Error'
@@ -52,11 +47,10 @@ try{
         start-process 'https://www.powershellgallery.com/packages/ImportExcel/7.0.1'
         &$resetBar
         break
-
-    }else{
-            
+    }
+    else
+    {        
         &$resetBar
         break    
     }
-
 }

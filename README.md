@@ -2,9 +2,24 @@
 
 Simple Query helps you perform bulk queries against Active Directory and export the data in different formats.
 
-![Alt text](/Example/1.png?raw=true)
+![Alt text](/Example/0.png?raw=true)
+
+## CHANGELOG
+
+### 2021-03-01
+#### Added
+- Forms DPI Awareness: Now all forms should adapt to screen resolution and scaling. C# code from https://hinchley.net/articles/get-the-scaling-rate-of-a-display-using-powershell/
+- 'Refresh' Button: Performs the query against Active Directory for the items on the DataGrid without the need to perform a new search.
+- 'Select Properties' Button: Add or Remove properties to the items on the DataGrid without the need to perform a new search.
+- 'Remove All' Button: Added to the 'Properties' Form, allows to remove all items on the Properties List.
+
+## FUNCTIONALITY
 
 All the entries added to the Search Form will be validated, those entries that do not correspond with the selected 'Object Class' as well as those entries that could not be found on the Domain will be displayed on a new form where you can see each skipped entry as well as the status (why was the entry skipped). This information can also be exported.
+
+__Screenshots are from an older version.
+
+![Alt text](/Example/1.png?raw=true)
 
 ![Alt text](/Example/2.png?raw=true)
 
@@ -12,7 +27,7 @@ Once all entries have been validated a new form should appear where you can sele
 
 ![Alt text](/Example/3.png?raw=true)
 
-Once the properties have been selected the main DataGrid should be filled and the 'Export' button should become enabled.
+After selecting the properties, the main DataGrid should be filled and the 'Export' button should become enabled.
 
 ![Alt text](/Example/4.png?raw=true)
 ![Alt text](/Example/5.png?raw=true)

@@ -1,19 +1,10 @@
-﻿[void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
-[void][Reflection.Assembly]::LoadWithPartialName('System.Drawing')
-[System.Windows.Forms.Application]::EnableVisualStyles()
-
-$bounds=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-$width=$bounds.Width
-$height=$bounds.Height
-
-$searchForm=New-Object System.Windows.Forms.Form
+﻿$searchForm=New-Object System.Windows.Forms.Form
 $searchForm.StartPosition='CenterScreen'
 $searchForm.Icon=[System.Drawing.Icon]::ExtractAssociatedIcon("$PSHOME\PowerShell.exe")
 $searchForm.FormBorderStyle='Fixed3D'
 $searchForm.KeyPreview=$True
 $searchForm.Text='Add Entries to Query'
-$searchForm.Width=$width-660
-$searchForm.Height=$height-380
+$searchForm.ClientSize=New-Object System.Drawing.Size(($width/2),($height/2.5))
 $searchForm.MaximizeBox=$false
 
 $searchLabelText=@'
@@ -31,26 +22,6 @@ $searchLabel.BackColor=[System.Drawing.Color]::FromName('Transparent')
 $searchLabel.Size=New-Object System.Drawing.Size(($width-690),85)
 $searchLabel.Location=New-Object System.Drawing.Size(10,10)
 $searchForm.Controls.Add($searchLabel)
-
-<#
-$userRadio=New-Object System.Windows.Forms.RadioButton
-$userRadio.Text='User'
-$userRadio.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
-$userRadio.Location=New-Object System.Drawing.Size(15,25)
-$userRadio.Size=New-Object System.Drawing.Size(60,25)
-
-$groupRadio=New-Object System.Windows.Forms.RadioButton
-$groupRadio.Text='Group'
-$groupRadio.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
-$groupRadio.Location=New-Object System.Drawing.Size(15,55)
-$groupRadio.Size=New-Object System.Drawing.Size(70,25)
-
-$computerRadio=New-Object System.Windows.Forms.RadioButton
-$computerRadio.Text='Computer'
-$computerRadio.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
-$computerRadio.Location=New-Object System.Drawing.Size(15,85)
-$computerRadio.Size=New-Object System.Drawing.Size(85,25)
-#>
 
 $searchTxtBoxText=@'
 example.object1
@@ -93,6 +64,7 @@ $searchOKbtn.Add_Click({
     $mainForm.Activate()
     $lines=$searchTxtBox.Text -split '\r|\n|\r\n'|?{$_}|%{$_.trim()}
     $objectClass=$classCBox.SelectedItem
+    New-Variable -Name selectedClass -Value $objectClass -Scope Global -Force
 
     . "$depPath\Listeners\searchEventListener.ps1" -Lines $lines -ObjectClass $objectClass
 

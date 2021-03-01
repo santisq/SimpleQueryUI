@@ -5,12 +5,17 @@
     [string[]]$toProcess,
     [parameter(mandatory)]
     [string]$objectClass
-)    
+)   
+
+$dataGrid.Rows.Clear()
+$dataGrid.Refresh()
+$dataGrid.ResetText()
+$dataGrid.Columns.Clear()
 
 $Global:Grid=New-Object System.Collections.ArrayList
 $allObjects=ObjectSearcher -Objects $toProcess -Class $objectClass -Properties $Properties
 
-$propsForm.Dispose()
+if($propsForm){$propsForm.Close()}
 $toGrid=$allObjects|select -Unique
 
 $progressBar.Maximum=if(!$toGrid.Count){1}else{$toGrid.Count}
@@ -64,31 +69,6 @@ foreach($object in $Grid)
     sleep -Milliseconds 1
 }
 
-<#
-$dataGrid.ColumnHeadersHeight=35
-$dataGrid.AutoSizeRowsMode=[System.Windows.Forms.DataGridViewAutoSizeRowsMode]::AllCellsExceptHeaders
-
-$sum=0
-$dataGrid.Columns.Width|%{$sum+=$_}
-
-if($sum -lt $dataGrid.Width)
-{
-    $dataGrid.AutoSizeColumnsMode=[System.Windows.Forms.DataGridViewAutoSizeColumnMode]::Fill
-}else{
-    $dataGrid.AutoSizeColumnsMode=[System.Windows.Forms.DataGridViewAutoSizeColumnMode]::DisplayedCells
-}
-
-$f=1;$dataGrid.Rows.DefaultCellStyle|%{
-    if($f=!$f){
-        $_.BackColor=[System.Drawing.Color]::LightGray
-    }
-}
-
-$dataGrid.RowHeadersDefaultCellStyle.BackColor=[System.Drawing.Color]::LightGray
-$dataGrid.RowHeadersDefaultCellStyle.ForeColor=[System.Drawing.Color]::White
-#>
-
-
 $dataGrid.RowHeadersVisible=$false
 $dataGrid.ColumnHeadersBorderStyle=2
 $dataGrid.AutoSizeColumnsMode=[System.Windows.Forms.DataGridViewAutoSizeColumnMode]::AllCells
@@ -103,8 +83,8 @@ if($sum -lt $dataGrid.Width)
 }
 
 $exportBtn.Enabled=$true
-#$clearBtn.Enabled=$true
-#$searchBtn.Enabled=$false
+$refreshBtn.Enabled=$true
+$changePropBtn.Enabled=$true
 
 $progressBar.Value=0
 $progressLbl.Text='Ready'

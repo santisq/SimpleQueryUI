@@ -3,23 +3,13 @@
     [psobject]$SkippedLines
 )
 
-[void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
-[void][Reflection.Assembly]::LoadWithPartialName('System.Drawing')
-[System.Windows.Forms.Application]::EnableVisualStyles()
-
-$bounds=[System.Windows.Forms.Screen]::PrimaryScreen.Bounds
-$width=$bounds.Width
-$height=$bounds.Height
-
 $skipForm=New-Object System.Windows.Forms.Form
 $skipForm.StartPosition='CenterScreen'
 $skipForm.Icon=[System.Drawing.Icon]::ExtractAssociatedIcon("$PSHOME\PowerShell.exe")
 $skipForm.FormBorderStyle='Fixed3D'
 $skipForm.KeyPreview=$True
 $skipForm.Text='Skipped Entries'
-#$skipForm.TopMost=$True
-$skipForm.Width=$width-600
-$skipForm.Height=$height-300
+$skipForm.ClientSize=New-Object System.Drawing.Size(($width/2),($height/2.5))
 $skipForm.MaximizeBox=$false
 
 $skipLabel=New-Object System.Windows.Forms.Label
@@ -35,7 +25,6 @@ $skipGrid.ReadOnly=$True
 $skipGrid.BorderStyle=1
 $skipGrid.SelectionMode=1
 $skipGrid.Font=New-Object System.Drawing.Font($myFont,9,[System.Drawing.FontStyle]::Regular)
-#$skipGrid.ColumnHeadersDefaultCellStyle.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
 $skipGrid.Location=New-Object System.Drawing.Size(10,40)
 $skipGrid.Size=New-Object System.Drawing.Size(($skipForm.Width-40),($skipForm.Height-125))
 $skipGrid.Anchor='Top, Bottom, Left'

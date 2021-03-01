@@ -1,33 +1,27 @@
-﻿[void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
-[void][Reflection.Assembly]::LoadWithPartialName('System.Drawing')
-[System.Windows.Forms.Application]::EnableVisualStyles()
-
-$mainForm=New-Object System.Windows.Forms.Form
+﻿$mainForm=New-Object System.Windows.Forms.Form
 $mainForm.StartPosition='CenterScreen'
 $mainForm.Icon=[System.Drawing.Icon]::ExtractAssociatedIcon("$PSHOME\PowerShell.exe")
 $mainForm.KeyPreview=$True
 $mainForm.FormBorderStyle='Fixed3D'
-#$mainForm.TopMost=$true
 $mainForm.Text='Simple Query'
 $mainForm.WindowState='Maximized'
 
 $bounds=($mainForm.CreateGraphics()).VisibleClipBounds.Size
 
-$description='Simple Query can help you perform Active Directory searchs for Users, Computers or Groups in bulk and export the data to different formats.
+$description='Simple Query can help you perform Active Directory bulk queries for Users, Computers or Groups and export to different formats.
 Use the ''Search'' button to input all the objects you wish to query.'
 
 $mainLbl=New-Object System.Windows.Forms.Label
-$mainLbl.Size=New-Object System.Drawing.Size(($bounds.Width-300),30)
-$mainLbl.Location=New-Object System.Drawing.Size(10,20)
+$mainLbl.Size=New-Object System.Drawing.Size(($bounds.Width-450),50)
+$mainLbl.Location=New-Object System.Drawing.Size(10,10)
 $mainLbl.Text=$description
 $mainLbl.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
 $mainForm.Controls.Add($mainLbl)
 
 $dataGrid=New-Object System.Windows.Forms.DataGridView
-$dataGrid.Size=New-Object System.Drawing.Size(($bounds.Width-20),$($bounds.Height-140))
+$dataGrid.Size=New-Object System.Drawing.Size(($bounds.Width-20),($bounds.Height-140))
 $dataGrid.Location=New-Object System.Drawing.Size(10,60)
 $dataGrid.Font=New-Object System.Drawing.Font($myFont,9,[System.Drawing.FontStyle]::Regular)
-#$dataGrid.ColumnHeadersDefaultCellStyle.Font=New-Object System.Drawing.Font($myFont,9,[System.Drawing.FontStyle]::Bold)
 $dataGrid.DefaultCellStyle.WrapMode='True'
 $dataGrid.AllowUserToResizeRows=$True
 $dataGrid.AllowUserToResizeColumns=$True
@@ -57,27 +51,8 @@ $helpBtn.Add_Click({
     . "$depPath\Forms\helpForm.ps1"
 })
 
-<#
-$clearBtn=New-Object System.Windows.Forms.Button
-$clearBtn.Size=New-Object System.Drawing.Size(85,30)
-$clearBtn.Location=New-Object System.Drawing.Size(($dataGrid.Width-74),20)
-$clearBtn.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
-$clearBtn.Text="&Clear"
-$clearBtn.Enabled=$false
-$clearBtn.Add_Click({
-    $dataGrid.Rows.Clear()
-    $dataGrid.Refresh()
-    $clearBtn.Enabled=$false
-    $exportBtn.Enabled=$false
-    $searchBtn.Enabled=$True
-    $dataGrid.ResetText()
-    $dataGrid.Columns.Clear()
-})
-#>
-
 $exportBtn=New-Object System.Windows.Forms.Button
 $exportBtn.Size=New-Object System.Drawing.Size(85,30)
-#$exportBtn.Location=New-Object System.Drawing.Size(($clearBtn.Location.X-$clearBtn.Width-3),20)
 $exportBtn.Location=New-Object System.Drawing.Size(($dataGrid.Width-74),20)
 $exportBtn.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
 $exportBtn.Text="&Export"
@@ -94,22 +69,35 @@ $searchBtn.Text="&Search"
 $searchBtn.Add_Click({
     
     if(. "$depPath\ModuleCheck\checkAD.ps1"){
-
-        $exportBtn.Enabled=$false
-        $dataGrid.Rows.Clear()
-        $dataGrid.Refresh()
-        $dataGrid.ResetText()
-        $dataGrid.Columns.Clear()
-
         . "$depPath\Forms\searchForm.ps1"
-
     }
         
 })
 
+$refreshBtn=New-Object System.Windows.Forms.Button
+$refreshBtn.Size=New-Object System.Drawing.Size(85,30)
+$refreshBtn.Location=New-Object System.Drawing.Size(($searchBtn.Location.X-$searchBtn.Width-3),20)
+$refreshBtn.Enabled=$false
+$refreshBtn.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
+$refreshBtn.Text="&Refresh"
+$refreshBtn.Add_Click({
+    . "$depPath\Listeners\toGridEventListener.ps1" -Properties $thisProps -toProcess $toProcess -ObjectClass $selectedClass
+})
+
+$changePropBtn=New-Object System.Windows.Forms.Button
+$changePropBtn.Size=New-Object System.Drawing.Size(125,30)
+$changePropBtn.Location=New-Object System.Drawing.Size(($refreshBtn.Location.X-$refreshBtn.Width-43),20)
+$changePropBtn.Enabled=$false
+$changePropBtn.Font=New-Object System.Drawing.Font($myFont,10,[System.Drawing.FontStyle]::Regular)
+$changePropBtn.Text="Select &Properties"
+$changePropBtn.Add_Click({
+    . "$depPath\Forms\propsForm.ps1" -Properties $propsArray -toProcess $toProcess -ObjectClass $selectedClass -thisSelectedProps $thisProps
+})
+
+$mainForm.Controls.Add($changePropBtn)
+$mainForm.Controls.Add($refreshBtn)
 $mainForm.Controls.Add($searchBtn)
 $mainForm.Controls.Add($exportBtn)
-#$mainForm.Controls.Add($clearBtn)
 $mainForm.Controls.Add($helpBtn)
 $mainForm.Controls.Add($exitBtn)
 
