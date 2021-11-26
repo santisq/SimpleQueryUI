@@ -10,13 +10,13 @@ __Latest version:__
 ### 2021-03-01
 #### Added
 - __Forms DPI Awareness:__ Now all forms should adapt to screen resolution and scaling. C# code from https://hinchley.net/articles/get-the-scaling-rate-of-a-display-using-powershell/
-- __'Refresh' Button:__ Performs the query against Active Directory for the items on the DataGrid without the need to perform a new search.
-- __'Select Properties' Button:__ Add or Remove properties to the items on the DataGrid without the need to perform a new search.
-- __'Remove All' Button:__ Added to the 'Properties' Form, allows to remove all items on the Properties List.
+- __`Refresh` Button:__ Performs the query against Active Directory for the items on the `DataGrid` without the need to perform a new search.
+- __`Select Properties` Button:__ Add or Remove properties to the items on the DataGrid without the need to perform a new search.
+- __`Remove All` Button:__ Added to the `Properties` Form, allows to remove all items on the Properties List.
 
 ## FUNCTIONALITY
 
-All the entries added to the Search Form will be validated, those entries that do not correspond with the selected 'Object Class' as well as those entries that could not be found on the Domain will be displayed on a new form where you can see each skipped entry as well as the status (why was the entry skipped). This information can also be exported.
+All the entries added to the Search Form will be validated, those entries that do not correspond with the selected __`ObjectClass`__ as well as those entries that could not be found on the Domain will be displayed on a new form where you can see each skipped entry as well as the status (why was the entry skipped). This information can also be exported.
 
 __Screenshots are from an older version.__
 
@@ -28,21 +28,21 @@ Once all entries have been validated a new form should appear where you can sele
 
 ![Alt text](/Example/3.png?raw=true)
 
-After selecting the properties, the main DataGrid should be filled and the 'Export' button should become enabled.
+After selecting the properties, the main DataGrid should be filled and the __`Export`__ button should become enabled.
 
 ![Alt text](/Example/4.png?raw=true)
 ![Alt text](/Example/5.png?raw=true)
 ![Alt text](/Example/6.png?raw=true)
 
-All buttons on the forms have shortcuts, the shortcuts can be accessed by pressing the 'ALT' key.
-For example, on the main form, ALT+S is the shortcut for the 'Search' button, ALT+E is the shortcut for the 'Export' button, etc.
+All buttons on the forms have shortcuts, the shortcuts can be accessed by pressing the <kbd>ALT</kbd> key.
+For example, on the main form, <kbd>ALT</kbd> + <kbd>S</kbd> is the shortcut for the 'Search' button, <kbd>ALT</kbd> + <kbd>E</kbd> is the shortcut for the __`Export`__ button, etc.
 
 ### Requirements:
    - PowerShell v5.1
    - ActiveDirectory PS Module
    - ImportExcel v7.1.0 PS Module
 
-### Export Formats: *.xlsx, *.csv, *.txt, *.xml, *.json
+### Export Formats: `*.xlsx`, `*.csv`, `*.txt`, `*.xml`, `*.json`
 
 #### For any bugs feel free to pm or email me.
   
